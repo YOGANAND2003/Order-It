@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" href="/images/logo.png">
+  </head>
+  <body>
+    <div class="login-box">
+      <h1>Login</h1>
+      <form>
+        <label>Email</label>
+        <input type="email" placeholder="" />
+        <label>Password</label>
+        <input type="password" placeholder="" />
+        <input type="button"  class="search-btn" value="Submit" />
+      </form>
+    </div>
+    
+  </body>
+
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js";
+    import { getDatabase, set, ref, update} from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
+  
+  
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAId9OoNMaeGvo4W9JGegJ1ae39HflQwwU",
+      authDomain: "restaurant-website-3daa7.firebaseapp.com",
+      databaseURL: "https://restaurant-website-3daa7-default-rtdb.firebaseio.com",
+      projectId: "restaurant-website-3daa7",
+      storageBucket: "restaurant-website-3daa7.appspot.com",
+      messagingSenderId: "884283888475",
+      appId: "1:884283888475:web:bb8dfcf0dd655ef93f807e"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const database = getDatabase(app);
+  
+  
+  
+  
+    submitData.addEventListener('click', (e) => {
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('psw').value;
+  
+  
+  
+  
+  
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          // ...
+          set(ref(database, 'users/' + user.uid), {
+            email: email,
+            password: password,
+          })
+            .then(() => {
+              // Data saved successfully!
+              alert('user created successfully');
+            })
+            .catch((error) => {
+              // The write failed...
+              alert(error);
+            });
+  
+  
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
+          alert(errorMessage);
+        });
+  
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          // ...
+  
+          
+          var lgDate = new data();
+  
+          update(ref(database, 'users/' + user.uid), {
+            last_login: new Date,
+          })
+            .then(() => {
+              // Data saved successfully!
+              alert('user logged in successfully');
+            })
+            .catch((error) => {
+              // The write failed...
+              alert(error);
+            });
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(erroeMessage);
+        });
+  
+        signOut(auth).then(() =>{
+  
+        }).catch((error) => {
+  
+        });
+   
+    });
+  </script>
+</html>
+
+
+
+
